@@ -86,11 +86,11 @@ const Icon = ({ editor }: { editor: any }) => {
   ];
 
   return (
-    <div className="editor-menu">
+    <div className="flex space-x-2">
       {items.map(({ action, title, icon }, index) => (
         <Tooltip title={title} key={index}>
-          <div className={`editor-menu-item`} onClick={action}>
-            <svg className="remix">
+          <div className="w-4 h-4" onClick={action}>
+            <svg className="w-4 h-4">
               <use xlinkHref={`${remixiconUrl}#ri-${icon}`} />
             </svg>
           </div>
