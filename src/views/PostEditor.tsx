@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react"
 import Editor from "../components/editor/Editor"
 import { Button, Tooltip, Spin } from "antd"
 import { PlusOutlined, EyeOutlined, EditOutlined, ShareAltOutlined } from "@ant-design/icons"
-
 import classnames from "classnames"
 import { EditorHandle, Mode, Post } from "../types"
 import { formatDate, getShareLink } from "../utils"
@@ -71,16 +70,12 @@ function PostEditor() {
                                     <Button icon={<ShareAltOutlined />} type="text" />
                                 </CopyToClipboard>
                             )}
-                            <Button type="primary" className="bg-black">
-                                Publish
-                            </Button>
                         </div>
                     </div>
 
                     {/* Editor Area */}
                     <div className="max-w-4xl mx-auto px-8 py-6">
                         <div>
-                            <div>{Math.random()}</div>
                             <div>
                                 {selectedPost ? (
                                     <>
@@ -102,24 +97,8 @@ function PostEditor() {
                                 )}
                             </div>
                         </div>
-                        <input
-                            type="text"
-                            placeholder="What is a Data Wallet and Why Does it Matter?"
-                            className="w-full text-3xl font-medium bg-transparent border-none outline-none mb-6"
-                        />
-                        <Editor
-                            selectedPost={selectedPost}
-                            ref={editorRef}
-                            mode={mode}
-                            // className="prose max-w-none"
-                        />
-                    </div>
 
-                    {/* Footer */}
-                    <div className="fixed bottom-0 left-72 right-0 bg-[#f5f5f5] px-4 py-2 text-xs text-gray-500 flex space-x-4">
-                        <span>words: {0}</span>
-                        <span>createdAt: {selectedPost?.createdAt && formatDate(selectedPost.createdAt)}</span>
-                        <span>updatedAt: {selectedPost?.updatedAt && formatDate(selectedPost.updatedAt)}</span>
+                        <Editor selectedPost={selectedPost} ref={editorRef} mode={mode} />
                     </div>
                 </div>
             </div>

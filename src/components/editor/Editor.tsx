@@ -65,8 +65,8 @@ const Editor: ForwardRefRenderFunction<EditorHandle, Props> = ({ selectedPost, m
 
     return (
         <div>
-            <div>
-                <input placeholder="Untitled" value={title} onChange={handleChangeTitle} />
+            <div className="text-3xl font-medium bg-transparent border-none outline-none mb-6">
+                {mode === Mode.Edit ? <input placeholder="Untitled" value={title} onChange={handleChangeTitle} /> : <div>{title}</div>}
             </div>
             {mode === Mode.Edit && <EditorMenu editor={editor} />}
 
@@ -74,19 +74,11 @@ const Editor: ForwardRefRenderFunction<EditorHandle, Props> = ({ selectedPost, m
                 <EditorContent editor={editor} />
             </div>
 
-            <div>
-                <div>
-                    <span>words:</span>
-                    <span>{charCount}</span>
-                </div>
-                <div>
-                    <span>createdAt:</span>
-                    <span>{formatDate(selectedPost?.createdAt)}</span>
-                </div>
-                <div>
-                    <span>updatedAt:</span>
-                    <span>{formatDate(selectedPost?.updatedAt)}</span>
-                </div>
+            {/* Footer */}
+            <div className="fixed bottom-0 left-72 right-0 bg-[#f5f5f5] px-4 py-2 text-xs text-gray-500 flex space-x-4">
+                <span>words: {charCount}</span>
+                <span>createdAt: {selectedPost?.createdAt && formatDate(selectedPost.createdAt)}</span>
+                <span>updatedAt: {selectedPost?.updatedAt && formatDate(selectedPost.updatedAt)}</span>
             </div>
         </div>
     )
