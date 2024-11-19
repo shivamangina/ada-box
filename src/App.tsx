@@ -1,17 +1,21 @@
-import React from "react";
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom"
 
-import PostEditor from "./views/PostEditor";
+import PostEditor from "./views/PostEditor"
+import { GlobalProvider } from "./context/ContextProvider"
 
 const router = createHashRouter([
-  {
-    path: "/",
-    element: <PostEditor />,
-  },
-]);
+    {
+        path: "/",
+        element: <PostEditor />,
+    },
+])
 
 function App() {
-  return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+    return (
+        <GlobalProvider>
+            <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
+        </GlobalProvider>
+    )
 }
 
-export default App;
+export default App
