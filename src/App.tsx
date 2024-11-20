@@ -1,12 +1,12 @@
 import { createHashRouter, RouterProvider } from "react-router-dom"
 
-import PostEditor from "./views/PostEditor"
+import Home from "./views/Home"
 import { GlobalProvider } from "./context/ContextProvider"
 
 const router = createHashRouter([
     {
         path: "/",
-        element: <PostEditor />,
+        element: <Home />,
     },
 ])
 
