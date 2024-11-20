@@ -5,6 +5,11 @@ export const GlobalReducer = (state: any, action: { type: any; payload: any }) =
                 ...state,
                 appLoading: action.payload,
             }
+        case "SET_FILETREE":
+            return {
+                ...state,
+                fileTree: action.payload,
+            }
 
         default:
             return state

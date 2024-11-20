@@ -15,9 +15,17 @@ export const GlobalProvider = ({ children }: any) => {
         })
     }
 
+    function setFileTree(data: any) {
+        dispatch({
+            type: "SET_FILETREE",
+            payload: data,
+        })
+    }
+
     const value = {
         ...state,
         setAppLoading,
+        setFileTree,
     }
 
     return <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
