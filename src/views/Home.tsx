@@ -2,17 +2,159 @@ import React from "react"
 import { Table, Button } from "antd"
 import { FolderOutlined, FilePdfOutlined, FileExcelOutlined, PlusOutlined } from "@ant-design/icons"
 import "rsuite/Tree/styles/index.css"
+import FolderFillIcon from "@rsuite/icons/FolderFill"
+import PageIcon from "@rsuite/icons/Page"
+import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowRight, MdFilePresent, MdFolder } from "react-icons/md"
 
 import { Tree } from "rsuite"
-import { mockTreeData } from "./mock"
 
-const data1 = mockTreeData({
-    limits: [3, 3, 4],
-    labels: (layer: any, value: any, faker: any) => {
-        const methodName = ["jobArea", "jobType", "firstName"]
-        return faker.person[methodName[layer]]()
+const data1: any = [
+    {
+        label: "docs",
+        value: "docs",
+        children: [
+            {
+                label: "pages",
+                value: "pages",
+                children: [
+                    {
+                        label: "components",
+                        value: "pages-components",
+                        children: [
+                            {
+                                label: "tree",
+                                value: "pages-tree",
+                                children: [
+                                    {
+                                        label: "fragments",
+                                        value: "pages-fragments",
+                                        children: [
+                                            {
+                                                label: "async",
+                                                value: "pages-async",
+                                                children: [
+                                                    {
+                                                        label: "index.tsx",
+                                                        value: "pages-index.tsx",
+                                                    },
+                                                    {
+                                                        label: "styles.css",
+                                                        value: "pages-styles.css",
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
     },
-})
+    {
+        label: "packages",
+        value: "packages",
+        children: [
+            {
+                label: "rsuite",
+                value: "packages-rsuite",
+                children: [
+                    {
+                        label: "src",
+                        value: "packages-src",
+                        children: [
+                            {
+                                label: "components",
+                                value: "packages-components",
+                                children: [
+                                    {
+                                        label: "Tree",
+                                        value: "packages-Tree",
+                                        children: [
+                                            {
+                                                label: "index.tsx",
+                                                value: "packages-index.tsx",
+                                            },
+                                            {
+                                                label: "styles.css",
+                                                value: "packages-styles.css",
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        label: "node_modules",
+        value: "node_modules",
+        children: [
+            {
+                label: "rsuite",
+                value: "node_modules-rsuite",
+                children: [
+                    {
+                        label: "src",
+                        value: "node_modules-src",
+                        children: [
+                            {
+                                label: "components",
+                                value: "node_modules-components",
+                                children: [
+                                    {
+                                        label: "Tree",
+                                        value: "node_modules-Tree",
+                                        children: [
+                                            {
+                                                label: "index.tsx",
+                                                value: "node_modules-index.tsx",
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        label: "package.json",
+                        value: "node_modules-package.json",
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        label: "README.md",
+        value: "README.md",
+        children: null,
+    },
+    {
+        label: "LICENSE",
+        value: "LICENSE",
+        children: null,
+    },
+    {
+        label: "package.json",
+        value: "package.json",
+        children: null,
+    },
+    {
+        label: "tsconfig.json",
+        value: "tsconfig.json",
+        children: null,
+    },
+    {
+        label: "webpack.config.js",
+        value: "webpack.config.js",
+        children: null,
+    },
+]
 
 const data = [
     {
@@ -87,11 +229,29 @@ function Home() {
                     <Button icon={<PlusOutlined />}>Create</Button>
                 </div>
             </div>
-            {/* <Table columns={columns} dataSource={data} pagination={false} /> */}
+            <Table columns={columns} dataSource={data} pagination={false} />
             <Tree
                 data={treeData}
                 draggable
-                onDrop={({ createUpdateDataFunction }, event) => setTreeData(createUpdateDataFunction(treeData))}
+                onDrop={({ createUpdateDataFunction, dropNode }, event) => {
+                    if (dropNode.children) {
+                        // Only allow drop if the target node has children
+                        setTreeData(createUpdateDataFunction(treeData))
+                    }
+                }}
+                renderTreeNode={(node) => {
+                    return (
+                        <>
+                            {node.children ? <FolderFillIcon /> : <PageIcon />} {node.label}
+                        </>
+                    )
+                }}
+                renderTreeIcon={(treeNode, expanded) => {
+                    if (treeNode.children) {
+                        return expanded ? <MdOutlineKeyboardArrowDown /> : <MdOutlineKeyboardArrowRight />
+                    }
+                    return null
+                }}
             />
         </div>
     )
