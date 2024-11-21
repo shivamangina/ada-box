@@ -26,6 +26,22 @@ function Home() {
         return filenames
     }
 
+    function setKeysExpanded(fileTree: any[], expandedKeys: any[]) {
+        fileTree.forEach((item) => {
+            if (expandedKeys.includes(item.value)) {
+                item.expanded = true
+            } else {
+                item.expanded = false
+            }
+
+            if (item.children) {
+                setKeysExpanded(item.children, expandedKeys)
+            }
+        })
+
+        return fileTree
+    }
+
     return (
         <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
@@ -80,8 +96,8 @@ function Home() {
                     return null
                 }}
                 onExpand={(expandedKeys) => {
-                    console.log("expandedKeys: ", expandedKeys)
-                    // update this in the fileTree
+                    const newFileTree = setKeysExpanded(fileTree, expandedKeys)
+                    setFileTree(newFileTree)
                 }}
             />
         </div>
