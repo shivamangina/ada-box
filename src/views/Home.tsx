@@ -1,53 +1,37 @@
-import FolderFillIcon from "@rsuite/icons/FolderFill"
-import PageIcon from "@rsuite/icons/Page"
+import { useEffect } from "react"
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowRight } from "react-icons/md"
-import "rsuite/Tree/styles/index.css"
+import { VscNewFile, VscNewFolder } from "react-icons/vsc"
 import { useGlobalContext } from "../context/ContextProvider"
 import { Tree } from "rsuite"
 import io from "socket.io-client"
-import { useEffect } from "react"
-import { v4 as uuidv4 } from "uuid"
+
+import { generate } from "random-words"
+import { getIcon, getFolderIcon, getExpandedFilenames, setKeysExpanded } from "../utils"
+
+import "rsuite/Tree/styles/index.css"
 
 const socket = io("http://localhost:8292")
 
+const extensions = ["pdf", "docx", "txt", "jpg", "png", "mp4", "mp3", "wav"]
+
+function createNewFile(fileTree: any[], setFileTree: Function, sendMessage: Function) {
+    let id = generate({ exactly: 2, join: "-" })
+    id = id.concat(".", extensions[Math.floor(Math.random() * extensions.length)])
+    const newFileTree = [{ label: `${id}`, value: `${id}`, type: "file" }, ...fileTree]
+    setFileTree(newFileTree)
+    sendMessage(newFileTree)
+}
+
+function createNewFolder(fileTree: any[], setFileTree: Function, sendMessage: Function) {
+    const id = generate({ exactly: 2, join: "-" })
+    const newFolder = { label: `${id}`, value: `${id}`, type: "folder" }
+    const newFileTree = [newFolder, ...fileTree]
+    setFileTree(newFileTree)
+    sendMessage(newFileTree)
+}
+
 function Home() {
     const { fileTree, setFileTree } = useGlobalContext()
-
-    function getExpandedFilenames(node: any[]) {
-        let filenames: string[] = []
-
-        node.forEach((item) => {
-            if (item.expanded) {
-                filenames.push(item.value)
-            }
-
-            if (item.children) {
-                filenames = filenames.concat(getExpandedFilenames(item.children))
-            }
-        })
-
-        return filenames
-    }
-
-    function setKeysExpanded(fileTree: any[], expandedKeys: any[]) {
-        fileTree.forEach((item) => {
-            if (expandedKeys.includes(item.value)) {
-                item.expanded = true
-            } else {
-                item.expanded = false
-            }
-
-            if (item.children) {
-                setKeysExpanded(item.children, expandedKeys)
-            }
-        })
-
-        return fileTree
-    }
-
-    const sendMessage = (fileTree: any[]) => {
-        socket.emit("update_file_tree", fileTree)
-    }
 
     useEffect(() => {
         // get the file tree from the server
@@ -75,70 +59,69 @@ function Home() {
         }
     }, [])
 
+    const sendMessage = (fileTree: any[]) => {
+        socket.emit("update_file_tree", fileTree)
+    }
+
     return (
-        <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-                <h2>My storage</h2>
-
-                <div>
-                    <button
-                        onClick={() => {
-                            console.log("create file")
-                            const id = uuidv4()
-                            setFileTree([{ label: `new-file-${id}`, value: `new-file-${id}`, type: "file" }, ...fileTree])
-                            sendMessage([{ label: `new-file-${id}`, value: `new-file-${id}`, type: "file" }, ...fileTree])
-                        }}
-                    >
-                        Create File
-                    </button>
+        <div className="h-screen">
+            <header className="flex items-start p-4 bg-white max-w-7xl mx-auto ">
+                <div className="">
+                    <a className="text-blue-600 font-semibold font-mono">Adalina.box</a>
                 </div>
-                <div>
-                    <button
-                        onClick={() => {
-                            console.log("create folder")
-                            const id = uuidv4()
-                            setFileTree([{ label: `newfolder-${id}`, value: `newfolder-${id}`, type: "folder" }, ...fileTree])
-                            sendMessage([{ label: `newfolder-${id}`, value: `newfolder-${id}`, type: "folder" }, ...fileTree])
-                        }}
-                    >
-                        Create Folder
-                    </button>
+            </header>
+            <div className="flex flex-col max-w-7xl mx-auto">
+                <div className="flex items-center justify-between p-4 bg-white ">
+                    <h1 className="text-lg font-bold">All Files</h1>
+                    <div className="flex space-x-2">
+                        <button
+                            onClick={() => createNewFile(fileTree, setFileTree, sendMessage)}
+                            className="flex items-center px-4 py-2 border rounded-2xl text-gray-700 hover:bg-gray-100"
+                        >
+                            <VscNewFile className="mr-0.5" />
+                        </button>
+                        <button
+                            onClick={() => createNewFolder(fileTree, setFileTree, sendMessage)}
+                            className="flex items-center px-4 py-2 border rounded-2xl text-gray-700 hover:bg-gray-100"
+                        >
+                            <VscNewFolder className="mr-0.5" />
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <Tree
-                data={fileTree}
-                draggable
-                expandItemValues={getExpandedFilenames(fileTree)}
-                onDrop={({ createUpdateDataFunction, dropNode, dropNodePosition }, event) => {
-                    if (dropNode.type === "folder" || dropNodePosition === 1 || dropNodePosition === 2) {
-                        // Only allow drop if the target node has children
-                        const newFileTree = createUpdateDataFunction(fileTree)
-                        // keep the folder logos
-
+                <Tree
+                    height={600}
+                    data={fileTree}
+                    draggable
+                    expandItemValues={getExpandedFilenames(fileTree)}
+                    onDrop={({ createUpdateDataFunction, dropNode, dropNodePosition }, event) => {
+                        if (dropNode.type === "folder" || dropNodePosition === 1 || dropNodePosition === 2) {
+                            // Only allow drop if the target node has children
+                            const newFileTree = createUpdateDataFunction(fileTree)
+                            setFileTree(newFileTree)
+                            sendMessage(newFileTree)
+                        }
+                    }}
+                    renderTreeNode={(node) => {
+                        return (
+                            <div key={Math.random()} className="flex items-center space-x-4 text-2xl ">
+                                <span className="">{node.type === "folder" ? getFolderIcon(node.expanded) : getIcon(node.label)}</span>{" "}
+                                <p>{node.label}</p>
+                            </div>
+                        )
+                    }}
+                    renderTreeIcon={(treeNode, expanded) => {
+                        if (treeNode.children) {
+                            return expanded ? <MdOutlineKeyboardArrowDown /> : <MdOutlineKeyboardArrowRight />
+                        }
+                        return null
+                    }}
+                    onExpand={(expandedKeys) => {
+                        const newFileTree = setKeysExpanded(fileTree, expandedKeys)
                         setFileTree(newFileTree)
                         sendMessage(newFileTree)
-                    }
-                }}
-                renderTreeNode={(node) => {
-                    return (
-                        <div key={Math.random()}>
-                            {node.type === "folder" ? <FolderFillIcon /> : <PageIcon />} {node.label}
-                        </div>
-                    )
-                }}
-                renderTreeIcon={(treeNode, expanded) => {
-                    if (treeNode.children) {
-                        return expanded ? <MdOutlineKeyboardArrowDown /> : <MdOutlineKeyboardArrowRight />
-                    }
-                    return null
-                }}
-                onExpand={(expandedKeys) => {
-                    console.log("expandedKeys: ", expandedKeys)
-                    const newFileTree = setKeysExpanded(fileTree, expandedKeys)
-                    setFileTree(newFileTree)
-                    sendMessage(newFileTree)
-                }}
-            />
+                    }}
+                />
+            </div>
         </div>
     )
 }
