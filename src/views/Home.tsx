@@ -67,7 +67,7 @@ function Home() {
         <div className="h-screen">
             <header className="flex items-start p-4 bg-white max-w-7xl mx-auto ">
                 <div className="">
-                    <a className="text-blue-600 font-semibold font-mono">Adalina.box</a>
+                    <a className="text-purple-600 font-semibold border font-mono bg-gray-100 px-2 py-1 rounded-md">Ada.box</a>
                 </div>
             </header>
             <div className="flex flex-col max-w-7xl mx-auto">

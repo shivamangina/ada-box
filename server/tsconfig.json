@@ -1,0 +1,23 @@
+{
+  "include": ["./src/**/*.ts", "./src/**/*.json", "./.eslintrc.js"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "typeRoots": ["./node_modules/@types"],
+    "lib": ["ES2020"]
+  }
+}

@@ -1,46 +1,68 @@
-# Getting Started with Create React App
+# Adabox
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A realtime web app that has a single page showing a collection of items.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+-   ability to add new items to the page, each item must have an icon and title at least
+-   ability to group items into a folder, each folder must have a name at least
+-   ability to re-order items and folder by dragging and dropping them
+-   ability to take out items from a folder and move them into another folder or the main page
+-   ability to toggle a folder between open vs closed state aka list all items within a folder vs hide them
+-   solution must persist the order of items and folders as well as the open/close state of the folders if a session is closed and restarted
+-   if multiple sessions are opened, the changes in any session must sync with all other sessions in realtime
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+These instructions will help you set up and run the project on your local machine for development and testing purposes.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+Ensure you have the following installed on your machine:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+-   Node.js (>= 14.x)
+-   npm (>= 6.x)
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Clone the repository:**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    ```bash
+    git clone git@github.com:shivamangina/ada-box.git
+    cd ada-box
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. **Install dependencies:**
 
-### `npm run eject`
+    ```bash
+    npm install
+    ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Running the Application
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To start the application in development mode, run:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npm start
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-## Learn More
+### Building for Production
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To build the application for production, use:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm run build
+```
+
+This will create an optimized build in the `build` folder.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+-   This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+-   Icons provided by [VSCode Icons](https://github.com/microsoft/vscode-icons).
